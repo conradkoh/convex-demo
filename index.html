@@ -3,7 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Bun Static Page</title>
+  <title>Convex Demo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Satoshi:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     * {
       margin: 0;
@@ -11,97 +14,519 @@
       box-sizing: border-box;
     }
 
+    :root {
+      --bg-primary: #0a0a0a;
+      --bg-secondary: #141414;
+      --bg-card: #1a1a1a;
+      --text-primary: #faf8f5;
+      --text-secondary: #a3a3a3;
+      --accent: #d4a574;
+      --accent-hover: #e8b889;
+      --border: #262626;
+      --shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    }
+
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      font-family: 'Satoshi', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
       min-height: 100vh;
       display: flex;
-      align-items: center;
-      justify-content: center;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    .app {
+      display: grid;
+      grid-template-columns: 380px 1fr;
+      min-height: 100vh;
+    }
+
+    /* Sidebar - Events List */
+    .sidebar {
+      background: var(--bg-secondary);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      position: sticky;
+      top: 0;
+    }
+
+    .sidebar-header {
+      padding: 32px 28px;
+      border-bottom: 1px solid var(--border);
+      background: linear-gradient(180deg, var(--bg-card) 0%, var(--bg-secondary) 100%);
+    }
+
+    .sidebar-header h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 8px;
+    }
+
+    .sidebar-header p {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      letter-spacing: 0.02em;
+    }
+
+    .events-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: 24px 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .events-list::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .events-list::-webkit-scrollbar-track {
+      background: var(--bg-primary);
+    }
+
+    .events-list::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 3px;
+    }
+
+    .events-list::-webkit-scrollbar-thumb:hover {
+      background: var(--text-secondary);
+    }
+
+    .event-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
       padding: 20px;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      animation: slideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
     }
 
-    .container {
-      background: white;
-      border-radius: 16px;
-      padding: 48px;
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-      max-width: 600px;
-      width: 100%;
+    .event-card::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 4px;
+      background: var(--accent);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .event-card:hover {
+      border-color: var(--accent);
+      transform: translateX(4px);
+      box-shadow: var(--shadow);
+    }
+
+    .event-card:hover::before {
+      opacity: 1;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateX(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    .event-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .event-badge {
+      padding: 4px 12px;
+      border-radius: 6px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .event-badge.click {
+      background: rgba(212, 165, 116, 0.15);
+      color: var(--accent);
+    }
+
+    .event-badge.hover {
+      background: rgba(236, 72, 153, 0.15);
+      color: #ec4899;
+    }
+
+    .event-badge.load {
+      background: rgba(34, 197, 94, 0.15);
+      color: #22c55e;
+    }
+
+    .event-timestamp {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      font-family: 'Satoshi', monospace;
+      letter-spacing: 0.02em;
+    }
+
+    .event-message {
+      font-size: 0.95rem;
+      color: var(--text-primary);
+      line-height: 1.5;
+    }
+
+    .empty-state {
       text-align: center;
+      padding: 48px 28px;
+      color: var(--text-secondary);
     }
 
-    h1 {
+    .empty-state-icon {
       font-size: 2.5rem;
       margin-bottom: 16px;
-      color: #333;
-      font-weight: 700;
+      opacity: 0.3;
     }
 
-    p {
+    /* Main Content */
+    .main-content {
+      padding: 48px 60px;
+      overflow-y: auto;
+    }
+
+    .header {
+      margin-bottom: 48px;
+    }
+
+    .header h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 3rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 12px;
+      line-height: 1.1;
+    }
+
+    .header p {
       font-size: 1.125rem;
-      color: #666;
+      color: var(--text-secondary);
+      max-width: 600px;
       line-height: 1.6;
+    }
+
+    /* Actions Section */
+    .actions-section {
+      margin-top: 40px;
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       margin-bottom: 24px;
     }
 
-    .badge {
-      display: inline-block;
-      background: #667eea;
-      color: white;
-      padding: 8px 16px;
-      border-radius: 9999px;
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    /* Clear Button */
+    .clear-button {
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      border-radius: 12px;
+      padding: 16px 28px;
       font-size: 0.875rem;
       font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
+      color: #ef4444;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'Satoshi', sans-serif;
     }
 
-    .stats {
+    .clear-button:hover {
+      background: rgba(239, 68, 68, 0.2);
+      border-color: #ef4444;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+    }
+
+    .clear-button:active {
+      transform: translateY(0);
+    }
+
+    /* Button Grid */
+    .button-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 16px;
-      margin-top: 32px;
-      padding-top: 32px;
-      border-top: 1px solid #e5e7eb;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
     }
 
-    .stat {
-      text-align: center;
+    .event-button {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 32px;
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
     }
 
-    .stat-value {
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: #667eea;
+    .event-button::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, var(--accent) 0%, #c49664 100%);
+      opacity: 0;
+      transition: opacity 0.3s;
     }
 
-    .stat-label {
+    .event-button:hover {
+      border-color: var(--accent);
+      transform: translateY(-4px);
+      box-shadow: var(--shadow);
+    }
+
+    .event-button:hover::before {
+      opacity: 0.1;
+    }
+
+    .event-button:active {
+      transform: translateY(-2px);
+    }
+
+    .event-button-icon {
+      font-size: 2rem;
+      margin-bottom: 16px;
+    }
+
+    .event-button h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 8px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .event-button p {
       font-size: 0.875rem;
-      color: #666;
-      margin-top: 4px;
+      color: var(--text-secondary);
+      line-height: 1.5;
+      position: relative;
+      z-index: 1;
+    }
+
+    .event-button.click { --border: #d4a574; }
+    .event-button.hover { --border: #ec4899; }
+    .event-button.load { --border: #22c55e; }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .app {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        height: auto;
+        max-height: 400px;
+        position: relative;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .main-content {
+        padding: 32px 24px;
+      }
+
+      .header h1 {
+        font-size: 2.25rem;
+      }
+
+      .button-grid {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <div class="badge">Powered by Bun</div>
-    <h1>Hello, World!</h1>
-    <p>Your static HTML page is being served successfully at port 9176. Fast, simple, and reliable.</p>
-    <div class="stats">
-      <div class="stat">
-        <div class="stat-value">⚡</div>
-        <div class="stat-label">Lightning Fast</div>
+  <div class="app">
+    <!-- Sidebar: Events List -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h2>Event Stream</h2>
+        <p>Real-time activity feed</p>
       </div>
-      <div class="stat">
-        <div class="stat-value">🚀</div>
-        <div class="stat-label">Zero Config</div>
+      <div class="events-list" id="eventsList">
+        <div class="empty-state">
+          <div class="empty-state-icon">⚡</div>
+          <p>No events yet. Trigger an action to begin.</p>
+        </div>
       </div>
-      <div class="stat">
-        <div class="stat-value">✨</div>
-        <div class="stat-label">Modern</div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <header class="header">
+        <h1>Convex Interactive Demo</h1>
+        <p>Experience real-time data synchronization. Trigger events and watch them appear instantly in the sidebar stream.</p>
+      </header>
+
+      <div class="actions-section">
+        <div class="section-header">
+          <h2 class="section-title">Event Actions</h2>
+          <button class="clear-button" id="clearEvents">
+            <span>🗑️</span>
+            Clear All Events
+          </button>
+        </div>
+
+        <div class="button-grid">
+          <button class="event-button click" id="clickEvent">
+            <div class="event-button-icon">👆</div>
+            <h3>Click Event</h3>
+            <p>Trigger a click interaction and log it to the event stream.</p>
+          </button>
+
+          <button class="event-button hover" id="hoverEvent">
+            <div class="event-button-icon">✨</div>
+            <h3>Hover Event</h3>
+            <p>Hover over this button to capture mouse interactions.</p>
+          </button>
+
+          <button class="event-button load" id="loadEvent">
+            <div class="event-button-icon">🔄</div>
+            <h3>Load Event</h3>
+            <p>Simulate a data load or page refresh event.</p>
+          </button>
+        </div>
       </div>
-    </div>
+    </main>
   </div>
+
+  <script src="https://unpkg.com/convex@1.3.1/dist/browser.bundle.js"></script>
+  <script>
+    const CONVEX_URL = "https://rosy-ostrich-273.convex.cloud";
+    const client = new convex.ConvexClient(CONVEX_URL);
+    
+    // Keep track of displayed event IDs to only animate new ones
+    const displayedEventIds = new Set();
+
+    // Subscribe to events
+    client.onUpdate("events:list", {}, (events) => {
+      const list = document.getElementById('eventsList');
+
+      if (events.length === 0) {
+        list.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-state-icon">⚡</div>
+            <p>No events yet. Trigger an action to begin.</p>
+          </div>
+        `;
+        displayedEventIds.clear();
+        return;
+      }
+
+      // Clear existing elements
+      list.innerHTML = '';
+      
+      // Render each event
+      events.forEach((event, index) => {
+        const date = new Date(event.timestamp);
+        const timeStr = date.toLocaleTimeString('en-US', {
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit',
+          hour12: true
+        });
+        const typeClass = event.type.toLowerCase();
+        
+        // Create a wrapper div for the event card
+        const wrapper = document.createElement('div');
+        wrapper.innerHTML = `
+          <div class="event-card">
+            <div class="event-header">
+              <span class="event-badge ${typeClass}">${event.type}</span>
+              <span class="event-timestamp">${timeStr}</span>
+            </div>
+            <p class="event-message">${event.message}</p>
+          </div>
+        `;
+        
+        const card = wrapper.firstElementChild;
+        
+        // Only animate new events
+        if (!displayedEventIds.has(event._id)) {
+          card.style.animation = 'slideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1)';
+          card.style.animationDelay = `${index * 0.05}s`;
+          displayedEventIds.add(event._id);
+        }
+        
+        list.appendChild(card);
+      });
+    });
+
+    // Event handlers
+    document.getElementById('clickEvent').addEventListener('click', () => {
+      client.mutation("events:create", {
+        type: "Click",
+        message: "Button was clicked!"
+      });
+    });
+
+    const hoverBtn = document.getElementById('hoverEvent');
+    let hoverTimeout;
+    hoverBtn.addEventListener('mouseenter', () => {
+      clearTimeout(hoverTimeout);
+      hoverTimeout = setTimeout(() => {
+        client.mutation("events:create", {
+          type: "Hover",
+          message: "Button was hovered!"
+        });
+      }, 300);
+    });
+
+    hoverBtn.addEventListener('mouseleave', () => {
+      clearTimeout(hoverTimeout);
+    });
+
+    document.getElementById('loadEvent').addEventListener('click', () => {
+      client.mutation("events:create", {
+        type: "Load",
+        message: "Load event triggered!"
+      });
+    });
+
+    // Clear all events
+    document.getElementById('clearEvents').addEventListener('click', async () => {
+      const confirmClear = confirm('Are you sure you want to clear all events?');
+      if (confirmClear) {
+        await client.mutation("events:clear", {});
+      }
+    });
+  </script>
 </body>
 </html>
