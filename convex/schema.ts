@@ -11,4 +11,13 @@ export default defineSchema({
     message: v.string(),
     timestamp: v.number(),
   }),
+  inventory: defineTable({
+    stock: v.number(),
+  }),
+  orders: defineTable({
+    userName: v.string(),
+    timestamp: v.number(),
+    orderNumber: v.number(),
+    status: v.union(v.literal("success"), v.literal("failed")),
+  }),
 });
