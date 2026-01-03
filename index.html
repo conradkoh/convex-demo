@@ -368,6 +368,208 @@
     .event-button.hover { --border: #ec4899; }
     .event-button.load { --border: #22c55e; }
 
+    /* Inventory Demo Styles */
+    .stock-display {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .stock-label {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 8px;
+    }
+
+    .stock-value {
+      font-family: 'Playfair Display', serif;
+      font-size: 3rem;
+      font-weight: 700;
+      color: var(--accent);
+      transition: transform 0.2s;
+    }
+
+    .inventory-controls {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 32px;
+    }
+
+    .inventory-button {
+      flex: 1;
+      min-width: 200px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px 24px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      font-family: 'Satoshi', sans-serif;
+    }
+
+    .inventory-button:hover {
+      border-color: var(--accent);
+      background: var(--bg-card);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow);
+    }
+
+    .inventory-button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .inventory-button.primary {
+      background: var(--accent);
+      color: var(--bg-primary);
+      border-color: var(--accent);
+    }
+
+    .inventory-button.primary:hover {
+      background: var(--accent-hover);
+      border-color: var(--accent-hover);
+    }
+
+    .inventory-button.danger {
+      background: rgba(239, 68, 68, 0.1);
+      border-color: rgba(239, 68, 68, 0.3);
+      color: #ef4444;
+    }
+
+    .inventory-button.danger:hover {
+      background: rgba(239, 68, 68, 0.2);
+      border-color: #ef4444;
+    }
+
+    .orders-header {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 16px;
+    }
+
+    .orders-list {
+      display: grid;
+      gap: 8px;
+      max-height: 400px;
+      overflow-y: auto;
+      padding-right: 8px;
+    }
+
+    .orders-list::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .orders-list::-webkit-scrollbar-track {
+      background: var(--bg-primary);
+    }
+
+    .orders-list::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 3px;
+    }
+
+    .order-item {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: all 0.2s;
+      animation: fadeIn 0.3s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .order-item.success {
+      border-color: rgba(34, 197, 94, 0.3);
+      background: rgba(34, 197, 94, 0.05);
+    }
+
+    .order-item.failed {
+      border-color: rgba(239, 68, 68, 0.3);
+      background: rgba(239, 68, 68, 0.05);
+    }
+
+    .order-item:hover {
+      border-color: var(--accent);
+    }
+
+    .order-info {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+    }
+
+    .order-number {
+      font-weight: 600;
+      color: var(--accent);
+    }
+
+    .order-user {
+      color: var(--text-secondary);
+      font-size: 0.875rem;
+    }
+
+    .order-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .order-status {
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .order-status.success {
+      background: rgba(34, 197, 94, 0.2);
+      color: #22c55e;
+    }
+
+    .order-status.failed {
+      background: rgba(239, 68, 68, 0.2);
+      color: #ef4444;
+    }
+
+    .order-time {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      font-family: 'Satoshi', monospace;
+    }
+
+    .orders-empty {
+      text-align: center;
+      padding: 48px 24px;
+      color: var(--text-secondary);
+    }
+
     /* Responsive */
     @media (max-width: 1024px) {
       .demo-content {
@@ -394,6 +596,10 @@
 
       .button-grid {
         grid-template-columns: 1fr;
+      }
+
+      .inventory-button {
+        min-width: auto;
       }
     }
   </style>
@@ -454,6 +660,40 @@
               <div class="empty-state-icon">⚡</div>
               <p>No events yet. Trigger an action to begin.</p>
             </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Inventory Concurrent Transactions Demo -->
+    <section class="demo-section">
+      <div class="demo-header">
+        <h2 class="demo-title">Concurrent Transaction Handling</h2>
+        <p class="demo-description">See how Convex automatically handles conflicting concurrent transactions with optimistic concurrency control. Place more orders than available stock and watch the system maintain data integrity.</p>
+      </div>
+
+      <div class="stock-display">
+        <div class="stock-label">Remaining Stock</div>
+        <div class="stock-value" id="stockValue">0</div>
+      </div>
+
+      <div class="inventory-controls">
+        <button class="inventory-button primary" id="restockBtn">
+          📦 Restock to 2
+        </button>
+        <button class="inventory-button" id="placeOrdersBtn">
+          🚀 Place 3 Concurrent Orders
+        </button>
+        <button class="inventory-button danger" id="clearOrdersBtn">
+          🗑️ Clear Orders
+        </button>
+      </div>
+
+      <div>
+        <h3 class="orders-header">Orders (<span id="orderCount">0</span>)</h3>
+        <div class="orders-list" id="ordersList">
+          <div class="orders-empty">
+            No orders yet. Click "Place Concurrent Orders" to test transaction handling.
           </div>
         </div>
       </div>
@@ -558,6 +798,99 @@
       const confirmClear = confirm('Are you sure you want to clear all events?');
       if (confirmClear) {
         await client.mutation("events:clear", {});
+      }
+    });
+
+    // ===== INVENTORY DEMO =====
+    
+    // Subscribe to inventory stock
+    client.onUpdate("inventory:getStock", {}, (data) => {
+      const stockValue = document.getElementById('stockValue');
+      stockValue.textContent = data.stock;
+      
+      // Add visual feedback for stock changes
+      stockValue.style.transform = 'scale(1.2)';
+      setTimeout(() => {
+        stockValue.style.transform = 'scale(1)';
+      }, 200);
+    });
+
+    // Subscribe to orders
+    client.onUpdate("inventory:getOrders", {}, (orders) => {
+      const ordersList = document.getElementById('ordersList');
+      const orderCount = document.getElementById('orderCount');
+      
+      orderCount.textContent = orders.length;
+
+      if (orders.length === 0) {
+        ordersList.innerHTML = `
+          <div class="orders-empty">
+            No orders yet. Click "Place Concurrent Orders" to test transaction handling.
+          </div>
+        `;
+        return;
+      }
+
+      ordersList.innerHTML = '';
+      
+      orders.forEach((order) => {
+        const date = new Date(order.timestamp);
+        const timeStr = date.toLocaleTimeString('en-US', {
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit',
+          hour12: true
+        });
+        
+        const orderItem = document.createElement('div');
+        orderItem.className = `order-item ${order.status}`;
+        orderItem.innerHTML = `
+          <div class="order-info">
+            <span class="order-number">Order #${order.orderNumber}</span>
+            <span class="order-user">${order.userName}</span>
+          </div>
+          <div class="order-right">
+            <span class="order-status ${order.status}">${order.status}</span>
+            <span class="order-time">${timeStr}</span>
+          </div>
+        `;
+        ordersList.appendChild(orderItem);
+      });
+    });
+
+    // Restock button
+    document.getElementById('restockBtn').addEventListener('click', async () => {
+      await client.mutation("inventory:restock", {});
+    });
+
+    // Place concurrent orders button
+    document.getElementById('placeOrdersBtn').addEventListener('click', async () => {
+      const btn = document.getElementById('placeOrdersBtn');
+      btn.disabled = true;
+      btn.textContent = '⏳ Placing orders...';
+      
+      // Create 3 concurrent order requests
+      const orderPromises = [];
+      for (let i = 1; i <= 3; i++) {
+        const promise = client.mutation("inventory:placeOrder", {
+          userName: `User${i}`,
+          orderNumber: i,
+        });
+        orderPromises.push(promise);
+      }
+      
+      // Wait for all orders to complete
+      await Promise.all(orderPromises);
+      
+      btn.disabled = false;
+      btn.textContent = '🚀 Place 3 Concurrent Orders';
+    });
+
+    // Clear orders button
+    document.getElementById('clearOrdersBtn').addEventListener('click', async () => {
+      const confirmClear = confirm('Are you sure you want to clear all orders?');
+      if (confirmClear) {
+        await client.mutation("inventory:clearOrders", {});
       }
     });
   </script>
