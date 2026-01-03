@@ -37,66 +37,9 @@
     }
 
     .app {
-      display: grid;
-      grid-template-columns: 380px 1fr;
-      min-height: 100vh;
-    }
-
-    /* Sidebar - Events List */
-    .sidebar {
-      background: var(--bg-secondary);
-      border-right: 1px solid var(--border);
-      display: flex;
-      flex-direction: column;
-      height: 100vh;
-      position: sticky;
-      top: 0;
-    }
-
-    .sidebar-header {
-      padding: 32px 28px;
-      border-bottom: 1px solid var(--border);
-      background: linear-gradient(180deg, var(--bg-card) 0%, var(--bg-secondary) 100%);
-    }
-
-    .sidebar-header h2 {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.75rem;
-      font-weight: 700;
-      color: var(--text-primary);
-      margin-bottom: 8px;
-    }
-
-    .sidebar-header p {
-      font-size: 0.875rem;
-      color: var(--text-secondary);
-      letter-spacing: 0.02em;
-    }
-
-    .events-list {
-      flex: 1;
-      overflow-y: auto;
-      padding: 24px 28px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .events-list::-webkit-scrollbar {
-      width: 6px;
-    }
-
-    .events-list::-webkit-scrollbar-track {
-      background: var(--bg-primary);
-    }
-
-    .events-list::-webkit-scrollbar-thumb {
-      background: var(--border);
-      border-radius: 3px;
-    }
-
-    .events-list::-webkit-scrollbar-thumb:hover {
-      background: var(--text-secondary);
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 48px 60px;
     }
 
     .event-card {
@@ -199,10 +142,91 @@
       opacity: 0.3;
     }
 
-    /* Main Content */
-    .main-content {
-      padding: 48px 60px;
+    /* Demo Section */
+    .demo-section {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 40px;
+      margin-bottom: 48px;
+    }
+
+    .demo-header {
+      margin-bottom: 32px;
+    }
+
+    .demo-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 8px;
+    }
+
+    .demo-description {
+      font-size: 1rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    .demo-content {
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      gap: 32px;
+    }
+
+    /* Events List */
+    .events-container {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      max-height: 600px;
+    }
+
+    .events-header {
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .events-header h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 4px;
+    }
+
+    .events-header p {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+    }
+
+    .events-list {
+      flex: 1;
       overflow-y: auto;
+      padding: 20px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .events-list::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .events-list::-webkit-scrollbar-track {
+      background: var(--bg-primary);
+    }
+
+    .events-list::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 3px;
+    }
+
+    .events-list::-webkit-scrollbar-thumb:hover {
+      background: var(--text-secondary);
     }
 
     .header {
@@ -221,25 +245,25 @@
     .header p {
       font-size: 1.125rem;
       color: var(--text-secondary);
-      max-width: 600px;
       line-height: 1.6;
     }
 
-    /* Actions Section */
-    .actions-section {
-      margin-top: 40px;
+    /* Actions Area */
+    .actions-area {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
     }
 
-    .section-header {
+    .actions-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 24px;
     }
 
-    .section-title {
+    .actions-title {
       font-family: 'Playfair Display', serif;
-      font-size: 1.5rem;
+      font-size: 1.25rem;
       font-weight: 600;
       color: var(--text-primary);
     }
@@ -275,8 +299,8 @@
     /* Button Grid */
     .button-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 20px;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
     }
 
     .event-button {
@@ -346,20 +370,22 @@
 
     /* Responsive */
     @media (max-width: 1024px) {
-      .app {
+      .demo-content {
         grid-template-columns: 1fr;
       }
 
-      .sidebar {
-        height: auto;
+      .events-container {
         max-height: 400px;
-        position: relative;
       }
     }
 
     @media (max-width: 768px) {
-      .main-content {
+      .app {
         padding: 32px 24px;
+      }
+
+      .demo-section {
+        padding: 28px 24px;
       }
 
       .header h1 {
@@ -374,57 +400,64 @@
 </head>
 <body>
   <div class="app">
-    <!-- Sidebar: Events List -->
-    <aside class="sidebar">
-      <div class="sidebar-header">
-        <h2>Event Stream</h2>
-        <p>Real-time activity feed</p>
+    <!-- Main Header -->
+    <header class="header">
+      <h1>Convex Interactive Demos</h1>
+      <p>Experience real-time data synchronization and transaction handling with Convex.</p>
+    </header>
+
+    <!-- Event Tracking Demo -->
+    <section class="demo-section">
+      <div class="demo-header">
+        <h2 class="demo-title">Real-time Event Tracking</h2>
+        <p class="demo-description">Trigger events and watch them appear instantly in the event stream. Experience Convex's real-time synchronization.</p>
       </div>
-      <div class="events-list" id="eventsList">
-        <div class="empty-state">
-          <div class="empty-state-icon">⚡</div>
-          <p>No events yet. Trigger an action to begin.</p>
+
+      <div class="demo-content">
+        <div class="actions-area">
+          <div class="actions-header">
+            <h3 class="actions-title">Event Actions</h3>
+            <button class="clear-button" id="clearEvents">
+              <span>🗑️</span>
+              Clear All Events
+            </button>
+          </div>
+
+          <div class="button-grid">
+            <button class="event-button click" id="clickEvent">
+              <div class="event-button-icon">👆</div>
+              <h3>Click Event</h3>
+              <p>Trigger a click interaction and log it to the event stream.</p>
+            </button>
+
+            <button class="event-button hover" id="hoverEvent">
+              <div class="event-button-icon">✨</div>
+              <h3>Hover Event</h3>
+              <p>Hover over this button to capture mouse interactions.</p>
+            </button>
+
+            <button class="event-button load" id="loadEvent">
+              <div class="event-button-icon">🔄</div>
+              <h3>Load Event</h3>
+              <p>Simulate a data load or page refresh event.</p>
+            </button>
+          </div>
+        </div>
+
+        <div class="events-container">
+          <div class="events-header">
+            <h3>Event Stream</h3>
+            <p>Real-time activity feed</p>
+          </div>
+          <div class="events-list" id="eventsList">
+            <div class="empty-state">
+              <div class="empty-state-icon">⚡</div>
+              <p>No events yet. Trigger an action to begin.</p>
+            </div>
+          </div>
         </div>
       </div>
-    </aside>
-
-    <!-- Main Content -->
-    <main class="main-content">
-      <header class="header">
-        <h1>Convex Interactive Demo</h1>
-        <p>Experience real-time data synchronization. Trigger events and watch them appear instantly in the sidebar stream.</p>
-      </header>
-
-      <div class="actions-section">
-        <div class="section-header">
-          <h2 class="section-title">Event Actions</h2>
-          <button class="clear-button" id="clearEvents">
-            <span>🗑️</span>
-            Clear All Events
-          </button>
-        </div>
-
-        <div class="button-grid">
-          <button class="event-button click" id="clickEvent">
-            <div class="event-button-icon">👆</div>
-            <h3>Click Event</h3>
-            <p>Trigger a click interaction and log it to the event stream.</p>
-          </button>
-
-          <button class="event-button hover" id="hoverEvent">
-            <div class="event-button-icon">✨</div>
-            <h3>Hover Event</h3>
-            <p>Hover over this button to capture mouse interactions.</p>
-          </button>
-
-          <button class="event-button load" id="loadEvent">
-            <div class="event-button-icon">🔄</div>
-            <h3>Load Event</h3>
-            <p>Simulate a data load or page refresh event.</p>
-          </button>
-        </div>
-      </div>
-    </main>
+    </section>
   </div>
 
   <script src="https://unpkg.com/convex@1.3.1/dist/browser.bundle.js"></script>
